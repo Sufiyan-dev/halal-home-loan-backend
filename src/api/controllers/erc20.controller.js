@@ -1,6 +1,6 @@
-import logger from "../logger/index.js";
-import { getAllowance, getApproveTxn } from "../services/erc20.service.js";
-import { handleError, handleResponse } from "../utils/responseHelper.js";
+const logger = require( "../logger/index.js");
+const { getAllowance, getApproveTxn } = require("../services/erc20.service.js");
+const { handleError, handleResponse } = require("../utils/responseHelper.js");
 
 const approveController = async (req,res) => {
     try {
@@ -55,4 +55,4 @@ const allowanceController = async (req,res) => {
     }
 }
 
-export { approveController, allowanceController }
+module.exports = { approveController, allowanceController }

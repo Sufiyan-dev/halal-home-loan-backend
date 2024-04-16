@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
-import dotenv from 'dotenv';
+const dotenv = require('dotenv');
 
-import buildProdLogger from './prodLogger.js';
-import buildDevLogger from './devLogger.js';
+const buildProdLogger =  require('./prodLogger.js');
+const buildDevLogger =  require('./devLogger.js');
 
 dotenv.config();
 
@@ -14,5 +14,4 @@ if (process.env.NODE_ENV == 'dev') {
     // production mode
     logger = buildProdLogger();
 }
-
-export default logger;
+module.exports = logger;

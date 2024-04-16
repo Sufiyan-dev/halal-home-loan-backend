@@ -25,4 +25,4 @@ const handleUnAuthorized = ({
     res.status(401).send({msg: err.message ? err.message : err });
 };
 
-export { handleResponse, handleError, handleUnAuthorized };
+module.exports = { handleResponse, handleError, handleUnAuthorized };

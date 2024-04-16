@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
-import express from 'express';
-import dotenv from 'dotenv';
+const express = require('express');
+const dotenv = require('dotenv');
 
-import logger from './src/api/logger/index.js';
-import apiRoutes from "./src/api/routes/index.js";
+const logger = require( './src/api/logger/index.js');
+const apiRoutes = require( "./src/api/routes/index.js") ;
 
 dotenv.config();
 

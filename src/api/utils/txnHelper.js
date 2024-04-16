@@ -1,7 +1,7 @@
-import {ethers} from "ethers";
-import erc20Abi from "./abi/erc20.json" assert { type: "json" };
-import dotenv from "dotenv";
-import logger from "../logger/index.js";
+const ethers = require("ethers");
+const erc20Abi = require("./abi/erc20.json");
+const dotenv = require("dotenv");
+const logger = require("../logger/index.js");
 dotenv.config();
 
 /**
@@ -155,4 +155,4 @@ const getReadFunction = async (contractAddress, contractAbi, functionName, param
     }
 }
 
-export { getContractInstance, getUnsignedTxn, getReadFunction };
+module.exports = { getContractInstance, getUnsignedTxn, getReadFunction };

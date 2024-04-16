@@ -1,4 +1,4 @@
-import { createLogger, format, transports } from 'winston';
+const { createLogger, format, transports } = require('winston');
 
 const buildDevLogger = () => {
     const logFormat = format.printf(({ level, message, timestamp, stack }) => {
@@ -18,4 +18,4 @@ const buildDevLogger = () => {
     });
 };
 
-export default buildDevLogger;
+module.exports = buildDevLogger;

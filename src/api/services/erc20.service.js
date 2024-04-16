@@ -1,6 +1,6 @@
-import logger from "../logger/index.js";
-import erc20Abi from "../utils/abi/erc20.json" assert { type: "json" };
-import { getContractInstance, getReadFunction, getUnsignedTxn } from "../utils/txnHelper.js";
+const logger = require("../logger/index.js");
+const erc20Abi  = require("../utils/abi/erc20.json");
+const { getContractInstance, getReadFunction, getUnsignedTxn }  = require("../utils/txnHelper.js");
 
 const getApproveTxn = async (approver, spender, token) => {
     try {
@@ -56,4 +56,4 @@ const getAllowance = async (approver, spender, token) => {
 }
 
 
-export { getApproveTxn, getAllowance };
+module.exports = { getApproveTxn, getAllowance };

@@ -1,4 +1,4 @@
-import { createLogger, format, transports } from 'winston';
+const  { createLogger, format, transports } = require('winston');
 
 const buildProdLogger = () => {
     // creating logger
@@ -15,5 +15,4 @@ const buildProdLogger = () => {
         ],
     });
 };
-
-export default buildProdLogger;
+module.exports = buildProdLogger;
