@@ -272,7 +272,7 @@ const getAllActiveProject = async (projectManager) => {
         console.log(currentProjectId);
         const projectInfoArray = [];
 
-        for(let i = 0; i <= currentProjectId.msg; i++){
+        for(let i = 1; i <= currentProjectId.msg; i++){
             const params = [i];
             const projectInfo = await getReadFunction(projectManager, projectManagerAbi,"projectInfo",params);
 
