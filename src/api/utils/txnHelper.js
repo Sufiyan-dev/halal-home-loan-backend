@@ -50,20 +50,26 @@ const getContractInstance = async (contractAddress, contractAbi, provider) => {
 // const testTxn = async () => {
 //     const sender = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
 //     const testToken = "0x41e94eb019c0762f9bfcf9fb1e58725bfb0e7582";
-//     const array = ["0x70997970C51812dc3A010C7d01b50e0d17dc79C8","500"]
-//     const provider = await getProvider();
-//     const erc20IInstance = getContractInstance(testToken,erc20Abi,provider);
+//     const array = ["0x9921b1AE0c2bd557A5352EDddbBf9723f1e56Fdf","0xa5d661d968F947D7573C84d36124876fE4212F47"]
+//     // const provider = await getProvider();
+//     // const erc20IInstance = getContractInstance(testToken,erc20Abi,provider,array);
 
-//     const unsingedTxn = await (await erc20IInstance).getFunction("approve").populateTransaction(...array);
-//     console.log("unsigned ", unsingedTxn);
-//     unsingedTxn.from = sender
-//     const voidSigner = new ethers.VoidSigner(sender, provider);
-//     const txnInfo = await voidSigner.populateTransaction(unsingedTxn);
-//     console.log("full txn ",txnInfo)
+//     // const unsingedTxn = await (await erc20IInstance).getFunction("approve").populateTransaction(...array);
+//     // console.log("unsigned ", unsingedTxn);
+//     // unsingedTxn.from = sender
+//     // const voidSigner = new ethers.VoidSigner(sender, provider);
+//     // const txnInfo = await voidSigner.populateTransaction(unsingedTxn);
+//     // console.log("full txn ",txnInfo)
 
-//     const result = await getUnsignedTxn(testToken,erc20Abi,"approve",array,sender);
-//     console.log("result ",result)
-//     return txnInfo;
+//     // const result = await getUnsignedTxn(testToken,erc20Abi,"approve",array,sender);
+//     // console.log("result ",result
+
+    
+//     const result = await getReadFunction(testToken,erc20Abi,"allowance",array);
+//     console.log(result);
+    
+//     console.log("hey")
+//     return result;
 // }
 
 /**
@@ -76,7 +82,7 @@ const getProvider = async () => {
     const ethereumNodeURL = `https://polygon-amoy.infura.io/v3/${process.env.INFURA_API_KEY}`;
     
     // Create a JsonRpcProvider instance with the constructed URL
-    const provider = new ethers.providers.JsonRpcProvider(ethereumNodeURL);
+    const provider = new ethers.JsonRpcProvider(ethereumNodeURL);
     
     // Return the Ethereum provider instance
     return provider;
@@ -128,9 +134,15 @@ const getUnsignedTxn = async (contractAddress, contractAbi, functionName, params
         // Populate full transaction data
         const fullTxn = await voidSigner.populateTransaction(unsignedTxn);
         logger.debug("full unsigned txn "+fullTxn);
+        console.log("full unsigned txn ",fullTxn);
+
+        let txnInfoStringify = JSON.stringify(fullTxn, (key, value) =>
+        typeof value === "bigint" ? value.toString() : value
+        );
+        console.log("to string value ",txnInfoStringify)
 
         // Return unsigned transaction data
-        return { msg: fullTxn, error: false };
+        return { msg: txnInfoStringify, error: false };
     } catch(err) {
         // Return error message if transaction generation fails
         return { msg: err.message, error: true };
@@ -141,18 +153,55 @@ const getReadFunction = async (contractAddress, contractAbi, functionName, param
     try {
         // Get Ethereum provider instance
         const provider = await getProvider();
-
+        
         // Get contract instance
         const contractInstance = await getContractInstance(contractAddress, contractAbi, provider);
+        console.log("funciton name ", functionName, "paramsArray", paramsArray)
 
-        const returnValue = await contractInstance[functionName](...paramsArray);
+        let returnValue = await contractInstance[functionName](...paramsArray);
         logger.debug("return value "+returnValue);
 
-        return returnValue;
+        if(Array.isArray(returnValue)){
+            returnValue = returnValue.map(element => typeof element === 'bigint' ? Number(element) : element);
+        }
+
+        return { msg: Array.isArray(returnValue) ? returnValue : typeof(returnValue) === 'bigint' ? Number(returnValue) : returnValue, error: false};
 
     } catch(err){
         return { msg: err.message, error: true};
     }
 }
 
-module.exports = { getContractInstance, getUnsignedTxn, getReadFunction };
+const getReadFunctionNoParams = async (contractAddress, contractAbi, functionName) => {
+    try {
+        const provider = await getProvider();
+
+        const contractInstance = await getContractInstance(contractAddress, contractAbi, provider);
+        console.log("funciton name ", functionName)
+        const returnValue = await contractInstance[functionName]();
+
+        logger.debug("return value "+returnValue);
+
+        return { msg: typeof(returnValue) === 'bigint' ? Number(returnValue) : returnValue, error: false};
+
+    } catch(err) {
+        return { msg: err.message, error: true};
+    }
+}
+
+function convertInput(input) {
+    if (typeof input === 'bigint') {
+        return Number(input);
+    } else if (Array.isArray(input)) {
+        for (let i = 0; i < input.length; i++) {
+            if (typeof input[i] === 'bigint') {
+                input[i] = Number(input[i]);
+            }
+        }
+    }
+    return input;
+}
+
+
+
+module.exports = { getContractInstance, getUnsignedTxn, getReadFunction, getReadFunctionNoParams };
