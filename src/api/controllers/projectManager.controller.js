@@ -1,4 +1,4 @@
-const { getOwner, getProjectToken, getPaymentToken, getProjectInfo, getCurrentProjectId, getInvestInProject, getQuote, getDevestInProject, getPurchaseResaleTokens, getAddTenantPayment } = require("../services/projectManager.service");
+const { getOwner, getProjectToken, getPaymentToken, getProjectInfo, getCurrentProjectId, getInvestInProject, getQuote, getDevestInProject, getPurchaseResaleTokens, getAddTenantPayment, getAllActiveProject } = require("../services/projectManager.service");
 const { handleError, handleResponse } = require("../utils/responseHelper");
 
 const ownerController = async (req,res) => {
@@ -243,5 +243,30 @@ const quoteController = async (req,res) => {
 }
 
 
+const allActiveProjectController = async (req,res) => {
+    try {
+        const {projectManager} = req.body;
 
-module.exports = { ownerController, projectTokenController, paymentTokenController, currentProjectIdController, projectInfoController, investInProjectController, devestFromProjectController, purchaseResaleTokensController, addTenantPaymentController, quoteController };
+        if(!projectManager){
+            throw new TypeError("require body values project manager address");
+        }
+
+        const result = await getAllActiveProject(projectManager);
+
+        if(result.error){
+            throw new TypeError(result.message);
+        }
+
+        handleResponse({res, statusCode: 201, result: result.message})
+    } catch(err) {
+        if (err instanceof TypeError) {
+            handleError({ res, statusCode: 400, err: err.message });
+        } else {// internal error
+            handleError({ res, statusCode: 500, err: err.message });
+        }
+    }
+}
+
+
+
+module.exports = { ownerController, projectTokenController, paymentTokenController, currentProjectIdController, projectInfoController, investInProjectController, devestFromProjectController, purchaseResaleTokensController, addTenantPaymentController, quoteController, allActiveProjectController };

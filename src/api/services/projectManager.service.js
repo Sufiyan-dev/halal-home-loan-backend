@@ -260,6 +260,44 @@ const getQuote = async (projectId, noOfTokens, account, projectManager) => {
     }
 }
 
+const getAllActiveProject = async (projectManager) => {
+    try {
+
+        const currentProjectId = await getReadFunctionNoParams(projectManager, projectManagerAbi,"currentProjectId");
+
+        if(currentProjectId.error){
+            throw new TypeError(currentProjectId.msg);
+        }
+
+        console.log(currentProjectId);
+        const projectInfoArray = [];
+
+        for(let i = 0; i <= currentProjectId.msg; i++){
+            const params = [i];
+            const projectInfo = await getReadFunction(projectManager, projectManagerAbi,"projectInfo",params);
+
+            console.log(projectInfo);
+
+            if(projectInfo.error){
+                throw new TypeError(projectInfo.msg);
+            }
+
+            projectInfoArray.push(projectInfo.msg);
+
+        }
+
+        return {
+            message: projectInfoArray,
+            error: false
+        }
+
+    } catch(err){
+        return {
+            message: err.message,
+            error: true
+        }
+    }
+}
 
 
-module.exports = { getOwner, getProjectToken, getPaymentToken, getCurrentProjectId, getProjectInfo, getInvestInProject, getDevestInProject, getPurchaseResaleTokens, getAddTenantPayment, getQuote };
+module.exports = { getOwner, getProjectToken, getPaymentToken, getCurrentProjectId, getProjectInfo, getInvestInProject, getDevestInProject, getPurchaseResaleTokens, getAddTenantPayment, getQuote, getAllActiveProject };

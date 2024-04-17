@@ -1,5 +1,5 @@
 const express = require('express');
-const { ownerController, projectTokenController, paymentTokenController, currentProjectIdController, projectInfoController, investInProjectController, devestFromProjectController, purchaseResaleTokensController, addTenantPaymentController, quoteController } = require('../controllers/projectManager.controller');
+const { ownerController, projectTokenController, paymentTokenController, currentProjectIdController, projectInfoController, investInProjectController, devestFromProjectController, purchaseResaleTokensController, addTenantPaymentController, quoteController, allActiveProjectController } = require('../controllers/projectManager.controller');
 const router = express.Router();
 
 router.get("/owner",ownerController);
@@ -13,6 +13,7 @@ router.post("/devestFromProject",devestFromProjectController);
 router.post("/purchaseResaleTokens",purchaseResaleTokensController);
 router.post("/addTenantPayment",addTenantPaymentController);
 router.get("/quote",quoteController);
+router.get("/allActiveProject",allActiveProjectController);
 
 router.post("/admin/initiateProject",);
 router.post("/admin/startProject",);
