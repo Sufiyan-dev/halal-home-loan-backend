@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 const express = require('express');
 const dotenv = require('dotenv');
+const cors = require('cors');
 
 const logger = require( './src/api/logger/index.js');
 const apiRoutes = require( "./src/api/routes/index.js") ;
@@ -11,6 +12,8 @@ const app = express();
 
 // req input phraser
 app.use(express.json());
+
+app.use(cors);
 
 app.use(apiRoutes);
 
