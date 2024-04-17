@@ -282,7 +282,9 @@ const getAllActiveProject = async (projectManager) => {
                 throw new TypeError(projectInfo.msg);
             }
 
-            projectInfoArray.push(projectInfo.msg);
+            if(projectInfo.msg[9] < 2){ // only project which are active will be filter with stage
+                projectInfoArray.push(projectInfo.msg);
+            }
 
         }
 
