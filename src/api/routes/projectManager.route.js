@@ -7,13 +7,13 @@ router.get("/projectToken",projectTokenController);
 router.get("/paymentToken",paymentTokenController);
 router.get("/currentProjectId",currentProjectIdController);
 router.get("/paused",);
-router.get("/projectInfo",projectInfoController);
+router.post("/projectInfo",projectInfoController);
 router.post("/investInProject",investInProjectController);
 router.post("/devestFromProject",devestFromProjectController);
 router.post("/purchaseResaleTokens",purchaseResaleTokensController);
 router.post("/addTenantPayment",addTenantPaymentController);
-router.get("/quote",quoteController);
-router.get("/allActiveProject",allActiveProjectController);
+router.post("/quote",quoteController);
+router.post("/allActiveProject",allActiveProjectController);
 
 router.post("/admin/initiateProject",);
 router.post("/admin/startProject",);
